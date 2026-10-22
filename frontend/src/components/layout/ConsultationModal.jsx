@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { X, Calendar, CheckCircle2 } from "lucide-react";
-import { apiClient } from "../../api/client";
+import { submitLeadWithFallback } from "../../utils/leadStorage";
 
 export default function ConsultationModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
@@ -19,13 +19,8 @@ export default function ConsultationModal({ isOpen, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("submitting");
-    try {
-      await apiClient.post("/consultation", formData);
-      setStatus("success");
-    } catch {
-      // Fallback confirmation when backend is not yet running in Part 1
-      setStatus("success");
-    }
+    await submitLeadWithFallback("/consultation", "consultations", formData);
+    setStatus("success");
   };
 
   return (
