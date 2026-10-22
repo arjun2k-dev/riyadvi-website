@@ -1,43 +1,90 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
+import { ArrowLeft, ArrowUpRight, Calendar, Clock, User } from "lucide-react";
+import { getBlogBySlug, BLOG_DATA } from "../data/blogData";
 
-export default function BlogArticle({ onOpenConsultation }) {
-  const params = useParams();
+export default function BlogArticle() {
+  const { slug } = useParams();
+  const article = getBlogBySlug(slug);
+  const relatedArticles = BLOG_DATA.filter((b) => b.slug !== article.slug).slice(0, 2);
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-      <div className="glass-panel metallic-border rounded-3xl p-8 md:p-14">
-        <span className="text-xs uppercase tracking-[0.25em] text-brand-gold font-semibold">
-          Part 1 Route Verified
-        </span>
-        <h1 className="text-3xl md:text-5xl font-bold text-gold-gradient mt-3">
-          Dynamic Blog Article (/blog/:slug)
-        </h1>
-        {Object.keys(params).length > 0 && (
-          <p className="mt-3 text-xs font-mono text-brand-goldLight bg-brand-gold/10 inline-block px-3 py-1 rounded-full border border-brand-gold/30">
-            Route Params: {JSON.stringify(params)}
-          </p>
-        )}
-        <p className="text-zinc-400 mt-4 max-w-2xl leading-relaxed">
-          Part 4 will populate the individual article view and related posts.
-        </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          {onOpenConsultation && (
-            <button
-              onClick={onOpenConsultation}
-              className="px-6 py-3 rounded-full bg-gold-gradient text-black font-semibold text-sm shadow-gold-sm"
-            >
-              Book a Free Consultation
-            </button>
-          )}
-          <Link
-            to="/services"
-            className="px-6 py-3 rounded-full border border-brand-gold/40 text-brand-goldLight hover:bg-brand-gold/10 text-sm font-medium"
-          >
-            Explore Services
-          </Link>
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+      <Link
+        to="/blog"
+        className="inline-flex items-center gap-2 text-xs font-semibold text-zinc-400 hover:text-brand-gold"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        <span>Back to Blog Insights</span>
+      </Link>
+
+      <article className="glass-panel metallic-border rounded-3xl p-8 md:p-12 space-y-8">
+        <div className="space-y-4 border-b border-zinc-800 pb-8">
+          <span className="px-3 py-1 rounded-full glass-gold text-brand-gold text-xs font-semibold">
+            {article.category}
+          </span>
+          <h1 className="text-3xl md:text-5xl font-extrabold text-white leading-tight">
+            {article.title}
+          </h1>
+          <div className="flex flex-wrap items-center gap-6 text-xs text-zinc-400 pt-2">
+            <span className="flex items-center gap-1.5">
+              <User className="w-4 h-4 text-brand-gold" />
+              {article.author} ({article.authorRole})
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Calendar className="w-4 h-4 text-brand-gold" />
+              {article.publishedAt}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Clock className="w-4 h-4 text-brand-gold" />
+              {article.readTime}
+            </span>
+          </div>
         </div>
-      </div>
-    </section>
+
+        <div className="space-y-5 text-zinc-300 text-base leading-relaxed">
+          {article.content.map((para, i) => (
+            <p key={i}>{para}</p>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap gap-2 pt-6 border-t border-zinc-800">
+          {article.tags.map((tag) => (
+            <span
+              key={tag}
+              className="px-3 py-1 rounded-full text-xs bg-zinc-900 text-brand-goldLight border border-brand-gold/30"
+            >
+              #{tag}
+            </span>
+          ))}
+        </div>
+      </article>
+
+      {/* Related Articles */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-bold text-white">Related Articles</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {relatedArticles.map((rel) => (
+            <div
+              key={rel.id}
+              className="glass-panel rounded-2xl p-6 border border-zinc-800 flex flex-col justify-between"
+            >
+              <div>
+                <span className="text-xs text-brand-gold font-semibold">{rel.category}</span>
+                <h3 className="text-lg font-bold text-white mt-1">{rel.title}</h3>
+                <p className="text-xs text-zinc-400 mt-2 line-clamp-2">{rel.excerpt}</p>
+              </div>
+              <Link
+                to={`/blog/${rel.slug}`}
+                className="inline-flex items-center gap-1 text-xs font-bold text-brand-gold mt-4 hover:underline"
+              >
+                <span>Read Article</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
   );
 }
