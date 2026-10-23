@@ -24,8 +24,7 @@ export default function ConsultationModal({ isOpen, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-      <div className="glass-panel metallic-border rounded-3xl max-w-lg w-full p-6 sm:p-8 relative shadow-gold-md">
+<div className="fixed inset-0 z-[99999999] isolate flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">      <div className="glass-panel metallic-border rounded-3xl max-w-lg w-full p-6 sm:p-8 relative shadow-gold-md">
         <button
           onClick={onClose}
           className="absolute top-5 right-5 p-2 rounded-full text-zinc-400 hover:text-white hover:bg-zinc-800/60"

@@ -167,8 +167,7 @@ function EcosystemScene({ isLowPower }) {
                 />
               </mesh>
 
-              <Html distanceFactor={10} position={[0, 0.34, 0]} center>
-                <button
+<Html distanceFactor={10} position={[0, 0.34, 0]} center zIndexRange={[10, 0]}>                <button
                   type="button"
                   onClick={() => setActiveNode(node.id)}
                   className={`px-2.5 py-1 rounded-full text-[10px] font-medium whitespace-nowrap transition-all ${
