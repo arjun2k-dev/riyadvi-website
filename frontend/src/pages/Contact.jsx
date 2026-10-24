@@ -27,7 +27,7 @@ export default function Contact() {
   });
   const [status, setStatus] = useState("idle");
 
-  const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || "+91 phone No";
+  const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || "919876543210";
   const calendlyUrl =
     import.meta.env.VITE_CALENDLY_URL || "https://calendly.com/riyadvi-consultation";
 
@@ -115,7 +115,7 @@ export default function Contact() {
                   <input
                     type="tel"
                     required
-                    placeholder="+91 98765 43210"
+                    placeholder="your phone number"
                     value={form.phone}
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl bg-zinc-900 border border-zinc-800 text-sm text-white focus:border-brand-gold focus:outline-none"
