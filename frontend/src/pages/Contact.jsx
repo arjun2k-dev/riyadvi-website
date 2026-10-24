@@ -27,7 +27,7 @@ export default function Contact() {
   });
   const [status, setStatus] = useState("idle");
 
-  const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || "919876543210";
+  const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || "918072487427";
   const calendlyUrl =
     import.meta.env.VITE_CALENDLY_URL || "https://calendly.com/riyadvi-consultation";
 

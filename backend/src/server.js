@@ -25,6 +25,7 @@ app.use(express.json({ limit: "2mb" }));
 app.use(morgan("dev"));
 
 // Health check endpoint
+app.get("/", (req, res) => res.json({ status: "Riyadvi API is running" }));
 app.get("/api/health", (req, res) => {
   res.json({
     success: true,
