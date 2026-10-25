@@ -125,8 +125,8 @@ NODE_ENV=development
 3. Add environment variable `VITE_API_URL=https://<your-backend-url>/api`.
 4. Deploy (`frontend/vercel.json` automatically configures SPA routing for all nested routes).
 
-### Backend Deployment (Render / Railway)
-1. Create a new **Web Service** on **Render** or **Railway** pointing to the `backend` root directory.
+### Backend Deployment (Render)
+1. Create a new **Web Service** on **Render** 
 2. Build Command: `npm install` | Start Command: `npm start`.
 3. Add environment variables `MONGODB_URI` and `CORS_ORIGIN=https://<your-vercel-frontend-url>`.
 
