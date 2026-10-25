@@ -36,7 +36,7 @@ Riyadvi Software Technologies (founded in 2021) required a complete digital tran
 | **Advanced Animations** | GSAP + GSAP `ScrollTrigger`, Lenis Smooth Scroll, Framer Motion (`framer-motion`) |
 | **Backend API** | Node.js + Express.js (`helmet`, `cors`, `morgan`, custom validation middleware) |
 | **Database** | MongoDB + Mongoose ODM (with automatic in-memory fallback for zero-config local evaluation) |
-| **Deployment** | Frontend: Vercel (`vercel.json`) • Backend: Render (`render.yaml`) / Railway |
+| **Deployment** | Frontend: Vercel (`vercel.json`) • Backend: Render (`render.yaml`) |
 
 ---
 
