@@ -132,30 +132,32 @@ NODE_ENV=development
 
 ---
 
-## 9. AI Tools Used (Mandatory Section 7 Documentation)
+## 9. AI Tools Used
 
-### AI Tool 1: Gemini / Claude (Architecture & 3D Scene Prototyping)
-- **Tool Name:** Gemini & Claude
-- **Purpose:** Rapid prototyping of React Three Fiber (R3F) procedural geometries, Fibonacci sphere node distribution math, and initial Mongoose validation schemas.
+### AI Tool: Google Gemini
+
+#### 1. 3D WebGL & Animation Engine Prototyping
+- **Tool Name:** Google Gemini
+- **Purpose:** Architecting the React Three Fiber (`@react-three/fiber`) procedural 3D scenes, Fibonacci sphere coordinate math, and GSAP `ScrollTrigger` timelines.
 - **Example Prompt:**
   > *"Create a React Three Fiber component representing an interactive 3D digital transformation ecosystem with a metallic gold (#D4AF37) icosahedron core, gyroscopic orbital rings, and 6 clickable satellite nodes that respond to pointer parallax."*
-- **What Was Generated:** Basic Three.js mesh hierarchy and pointer rotation math.
+- **What Was Generated:** Initial Three.js mesh hierarchy, pointer rotation math, and orbital ring structures for `HeroDigitalEcosystem3D.jsx`, `TechConstellation3D.jsx`, `ServiceVisualizer3D.jsx`, and `CaseStudyShowcase3D.jsx`.
 - **What Was Manually Changed:**
-  - Engineered `WebGLCanvasWrapper.jsx` with `IntersectionObserver` to pause WebGL frame loops when scrolled off-screen.
-  - Added `useDevicePerformance.js` to dynamically scale `dpr` and particle counts on mobile GPUs and added an interactive Eco/Fallback mode toggle.
-  - Integrated custom HTML overlay badges (`@react-three/drei` `<Html>`) styled with Riyadvi's `#D4AF37` Gold and `#000000` Black design tokens.
-- **Why the Tool Was Selected:** Strong spatial reasoning for 3D trigonometry (Fibonacci sphere coordinates in `TechConstellation3D.jsx`) and clean React hook composition.
+  - Configured `zIndexRange={[10, 0]}` on `@react-three/drei` `<Html>` overlays and isolated the consultation modal (`z-[99999999] isolate`) so 3D labels never bleed through popups.
+  - Built `WebGLCanvasWrapper.jsx` with `IntersectionObserver` to pause WebGL frame loops when scrolled off-screen and `useDevicePerformance.js` for mobile GPU optimization.
+  - Synchronized Lenis smooth scrolling with `gsap.ticker` and `ScrollTrigger.update` in `useSmoothScroll.js`.
+- **Why the Tool Was Selected:** Strong spatial reasoning for 3D trigonometry, React Three Fiber hook patterns, and multi-file full-stack context retention.
 
-### AI Tool 2: Cursor / GitHub Copilot (Reusable Templates & Form State)
-- **Tool Name:** Cursor & GitHub Copilot
-- **Purpose:** Accelerating repetitive form field bindings for the 6-step Business Health Checkup and scaffolding data arrays for the 6 services and 10 portfolio case studies.
+#### 2. Dynamic Content Architecture & Full-Stack API Scaffolding
+- **Tool Name:** Google Gemini
+- **Purpose:** Structuring the reusable data-driven page templates (`/services/:slug`, `/portfolio/:slug`, `/blog/:slug`, `/careers/:jobSlug`), the 6-step Business Health Checkup diagnostic, and the Node.js + Express + MongoDB backend schemas.
 - **Example Prompt:**
-  > *"Refactor six separate service pages into a single data-driven ServiceDetail.jsx template consuming a structured servicesData.js schema with dynamic 3D visualizer switching and related portfolio filtering."*
-- **What Was Generated:** Initial template layout and prop mappings.
+  > *"Design a reusable React Router v6 template architecture and Express + Mongoose API schemas to handle Contact Enquiries, Consultation Requests, 6-step Business Health Checkup leads, Lead Magnet downloads, and Career Applications."*
+- **What Was Generated:** Structured data schemas (`servicesData.js`, `portfolioData.js`, `blogData.js`, `careersData.js`), reusable page templates, Express validation routes, and Mongoose models (`schemas.js`).
 - **What Was Manually Changed:**
-  - Synchronized Lenis smooth scrolling with `gsap.ticker` and `ScrollTrigger.update` in `useSmoothScroll.js` to eliminate scroll jitter during pinned timeline animations.
-  - Built hybrid persistence (`leadStorage.js` + Express in-memory fallback) so all 5 lead forms and the `/admin` dashboard work both online with MongoDB and offline in browser preview.
-- **Why the Tool Was Selected:** High speed for multi-file refactoring and strict schema consistency across dynamic routes.
+  - Added `dns.setServers(["8.8.8.8", "1.1.1.1"])` in `backend/src/server.js` to resolve local ISP `querySrv ECONNREFUSED` DNS blocks when connecting to MongoDB Atlas.
+  - Configured production CORS, `VITE_API_URL` endpoint normalization in `frontend/src/api/client.js`, and Vercel SPA rewrite rules (`frontend/vercel.json`).
+- **Why the Tool Was Selected:** Ability to maintain strict design system consistency (`#D4AF37` Gold / `#000000` Black) and end-to-end schema alignment across both `/frontend` and `/backend` in a single workflow.
 
 ---
 
