@@ -30,8 +30,8 @@ export default function Navbar({ onOpenConsultation }) {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "glass-panel py-3 shadow-gold-sm" : "bg-transparent py-5"
+      className={`fixed top-0 left-0 right-0 z-[9999999] transition-all duration-300 ${
+        scrolled ? "glass-panel py-3 shadow-gold-sm" : "bg-black/90 py-5"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -161,8 +161,7 @@ export default function Navbar({ onOpenConsultation }) {
       </div>
 
       {mobileMenuOpen && (
-        <div className="lg:hidden glass-panel border-t border-zinc-800/80 mt-3 px-6 py-6 space-y-4">
-          <div className="grid grid-cols-1 gap-2">
+            <div className="lg:hidden bg-black/95 backdrop-blur-xl border-t border-zinc-800 mt-3 px-6 py-6 space-y-4 relative z-[9999999]">          <div className="grid grid-cols-1 gap-2">
             <Link to="/" className="py-2 text-zinc-200 hover:text-brand-gold font-medium">
               Home
             </Link>

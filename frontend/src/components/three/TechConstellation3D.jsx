@@ -95,7 +95,7 @@ function ConstellationScene({ selectedTech, onSelectTech }) {
                     roughness={0.2}
                   />
                 </mesh>
-                <Html distanceFactor={9.5} position={[0, 0.32, 0]} center>
+                <Html distanceFactor={9.5} position={[0, 0.32, 0]} center zIndexRange={[10, 0]}>
                   <button
                     type="button"
                     onClick={() => onSelectTech(node)}

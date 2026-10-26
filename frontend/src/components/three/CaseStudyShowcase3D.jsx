@@ -59,7 +59,7 @@ function CaseStudyStage({ projectTitle, metricLabel, accentColor = "#D4AF37" }) 
           </mesh>
 
           {/* Floating Live Outcome Badge */}
-          <Html position={[0, 1.25, 0]} center distanceFactor={8}>
+          <Html position={[0, 1.25, 0]} center distanceFactor={8} zIndexRange={[10, 0]}>
             <div className="px-3.5 py-1.5 rounded-full bg-black/90 border border-brand-gold text-brand-goldLight text-xs font-semibold whitespace-nowrap shadow-gold-sm">
               {projectTitle} • {metricLabel}
             </div>
