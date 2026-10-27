@@ -122,7 +122,6 @@ export default function Home({ onOpenConsultation }) {
                 </a>
               </div>
 
-              {/* Executive Trust Metrics */}
               <div className="grid grid-cols-3 gap-4 pt-6 border-t border-zinc-800/80">
                 <div>
                   <p className="text-2xl md:text-3xl font-extrabold text-gold-gradient">2021</p>
@@ -139,7 +138,6 @@ export default function Home({ onOpenConsultation }) {
               </div>
             </div>
 
-            {/* Interactive 3D Hero Ecosystem */}
             <div className="lg:col-span-6">
               <HeroDigitalEcosystem3D />
             </div>
@@ -177,7 +175,6 @@ export default function Home({ onOpenConsultation }) {
           </Link>
         </div>
 
-        {/* Live 3D Interactive Service Stage + Selector */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center glass-panel metallic-border rounded-3xl p-6 md:p-10">
           <div className="lg:col-span-5 space-y-4">
             <span className="text-[11px] font-mono uppercase tracking-widest text-brand-gold bg-brand-gold/10 px-3 py-1 rounded-full border border-brand-gold/30">
@@ -186,7 +183,7 @@ export default function Home({ onOpenConsultation }) {
             <h3 className="text-2xl md:text-3xl font-bold text-white">{activeService.title}</h3>
             <p className="text-sm text-zinc-400 leading-relaxed">{activeService.heroDescription}</p>
             <div className="flex flex-wrap gap-2 pt-2">
-              {activeService.techStack.slice(0, 5).map((tech) => (
+              {(activeService.techStack || []).slice(0, 5).map((tech) => (
                 <span
                   key={tech}
                   className="px-2.5 py-1 rounded-lg text-xs bg-zinc-900 text-zinc-300 border border-zinc-800"
@@ -217,7 +214,6 @@ export default function Home({ onOpenConsultation }) {
           </div>
         </div>
 
-        {/* 6 Interactive Service Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {(services || []).map((service, idx) => {
             const isSelected = service.slug === activeServiceSlug;
@@ -286,7 +282,6 @@ export default function Home({ onOpenConsultation }) {
       {/* 15. WHY RIYADVI + END-TO-END SOLUTIONS + BUSINESS HEALTH CHECKUP */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Since 2021 Story Card */}
           <div className="lg:col-span-7 glass-panel metallic-border rounded-3xl p-8 md:p-10 space-y-6">
             <span className="text-xs uppercase tracking-[0.25em] text-brand-gold font-semibold">
               Why Riyadvi • Since 2021
@@ -322,7 +317,6 @@ export default function Home({ onOpenConsultation }) {
             </div>
           </div>
 
-          {/* Business Health Checkup Interactive Diagnostic Promo */}
           <div className="lg:col-span-5 glass-gold rounded-3xl p-8 md:p-10 flex flex-col justify-between space-y-6">
             <div className="space-y-4">
               <span className="px-3 py-1 rounded-full bg-brand-gold text-black font-bold text-xs uppercase tracking-wider">
@@ -367,7 +361,6 @@ export default function Home({ onOpenConsultation }) {
           </div>
         </div>
 
-        {/* End-to-End Solutions Pipeline */}
         <div className="glass-panel rounded-3xl p-8 border border-zinc-800/90">
           <div className="text-center mb-8">
             <span className="text-xs uppercase tracking-[0.2em] text-brand-gold font-semibold">
@@ -393,7 +386,9 @@ export default function Home({ onOpenConsultation }) {
       </section>
 
       {/* INTERACTIVE AI SOLUTIONS ARCHITECT CONSOLE (AI + BACKEND + MONGODB) */}
-      <AISolutionsArchitect />
+      <section id="ai-architect" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24">
+        <AISolutionsArchitect onOpenConsultation={onOpenConsultation} />
+      </section>
 
       {/* FEATURED PORTFOLIO CASE STUDIES PREVIEW */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
