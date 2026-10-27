@@ -1,5 +1,4 @@
 # Final Interview Demonstration — 10–15 Minute Technical Walkthrough Guide
-*(Prepared for Section 38 of the Riyadvi Full-Stack Developer Interview Assignment)*
 
 ## 1. Design (1.5 mins)
 - **Why this direction was selected:** We paired Riyadvi's brand Gold (`#D4AF37`) and Black (`#000000`) with dark obsidian surfaces (`#0A0A0C`), glassmorphism (`.glass-panel`, `.glass-gold`), and metallic borders to position Riyadvi as a high-trust enterprise Technology & Digital Solutions Partner rather than a generic white-template agency.
