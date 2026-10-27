@@ -61,7 +61,7 @@ export default function Navbar({ onOpenConsultation }) {
               to="/services"
               className="flex items-center gap-1 hover:text-brand-gold transition-colors py-2"
             >
-              <span>Services ({services.length})</span>
+              <span>Services </span>
               <ChevronDown
                 className={`w-4 h-4 transition-transform duration-200 ${
                   servicesHover ? "rotate-180 text-brand-gold" : ""
