@@ -1,13 +1,19 @@
 import axios from "axios";
 
-const rawUrl = import.meta.env.VITE_API_URL || "https://riyadvi-backend-api.onrender.com/api";
-const API_BASE_URL = rawUrl.endsWith("/api") ? rawUrl : `${rawUrl.replace(/\/$/, "")}/api`;
+// Automatically uses VITE_API_URL if set, or defaults to the live Render backend API
+const rawBaseUrl =
+  import.meta.env.VITE_API_URL || "https://riyadvi-backend-api.onrender.com/api";
+
+export const API_BASE_URL = rawBaseUrl.endsWith("/api")
+  ? rawBaseUrl
+  : `${rawBaseUrl.replace(/\/$/, "")}/api`;
+
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json"
   },
-  timeout: 15000
+  timeout: 25000
 });
 
 apiClient.interceptors.response.use(

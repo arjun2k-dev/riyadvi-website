@@ -1,21 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { ChevronDown, Menu, X, Sparkles, ArrowUpRight } from "lucide-react";
-
-const SERVICE_LINKS = [
-  { name: "Web Development", slug: "/services/web-development", desc: "Scalable enterprise & custom web platforms" },
-  { name: "App Development", slug: "/services/app-development", desc: "Native & cross-platform iOS/Android apps" },
-  { name: "Digital Marketing", slug: "/services/digital-marketing", desc: "Data-driven performance & SEO growth" },
-  { name: "AR / VR Solutions", slug: "/services/ar-vr", desc: "Immersive spatial & XR experiences" },
-  { name: "3D Modeling", slug: "/services/3d-modeling", desc: "Interactive WebGL & high-poly 3D assets" },
-  { name: "UI/UX Design", slug: "/services/ui-ux-design", desc: "Human-centered product & design systems" }
-];
+import { ChevronDown, Menu, X, Sparkles, ArrowUpRight, Database } from "lucide-react";
+import { useContent } from "../../context/ContentContext";
 
 export default function Navbar({ onOpenConsultation }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [servicesHover, setServicesHover] = useState(false);
   const location = useLocation();
+  const { services, telemetry } = useContent();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 24);
@@ -30,8 +23,8 @@ export default function Navbar({ onOpenConsultation }) {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-[9999999] transition-all duration-300 ${
-        scrolled ? "glass-panel py-3 shadow-gold-sm" : "bg-black/90 py-5"
+      className={`fixed top-0 left-0 right-0 z-[999999] isolate transition-all duration-300 ${
+        scrolled ? "glass-panel py-3 shadow-gold-sm" : "bg-black/90 backdrop-blur-md py-4"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -49,7 +42,7 @@ export default function Navbar({ onOpenConsultation }) {
           </div>
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-7 text-sm font-medium text-zinc-300">
+        <nav className="hidden lg:flex items-center gap-6 text-sm font-medium text-zinc-300">
           <NavLink
             to="/"
             className={({ isActive }) =>
@@ -68,7 +61,7 @@ export default function Navbar({ onOpenConsultation }) {
               to="/services"
               className="flex items-center gap-1 hover:text-brand-gold transition-colors py-2"
             >
-              <span>Services</span>
+              <span>Services ({services.length})</span>
               <ChevronDown
                 className={`w-4 h-4 transition-transform duration-200 ${
                   servicesHover ? "rotate-180 text-brand-gold" : ""
@@ -77,19 +70,21 @@ export default function Navbar({ onOpenConsultation }) {
             </Link>
 
             {servicesHover && (
-              <div className="absolute top-full left-0 w-[520px] pt-2">
-                <div className="glass-panel rounded-2xl p-4 border border-brand-gold/25 shadow-gold-md grid grid-cols-2 gap-2">
-                  {SERVICE_LINKS.map((item) => (
+              <div className="absolute top-full left-0 w-[540px] pt-2">
+                <div className="bg-zinc-950/95 backdrop-blur-2xl rounded-2xl p-4 border border-brand-gold/30 shadow-gold-md grid grid-cols-2 gap-2">
+                  {services.map((item) => (
                     <Link
                       key={item.slug}
-                      to={item.slug}
+                      to={`/services/${item.slug}`}
                       className="p-3 rounded-xl hover:bg-brand-gold/10 border border-transparent hover:border-brand-gold/30 transition-all group"
                     >
                       <div className="flex items-center justify-between text-white group-hover:text-brand-gold font-medium text-sm">
-                        <span>{item.name}</span>
+                        <span>{item.title}</span>
                         <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>
-                      <p className="text-xs text-zinc-400 mt-1 line-clamp-1">{item.desc}</p>
+                      <p className="text-xs text-zinc-400 mt-1 line-clamp-1">
+                        {item.tagline || item.visualType}
+                      </p>
                     </Link>
                   ))}
                 </div>
@@ -143,6 +138,19 @@ export default function Navbar({ onOpenConsultation }) {
         </nav>
 
         <div className="hidden lg:flex items-center gap-3">
+          <Link
+            to="/admin"
+            className="px-3 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 hover:border-brand-gold/50 text-[11px] font-mono text-zinc-300 flex items-center gap-1.5"
+            title="Full-Stack MongoDB & Dynamic CMS Dashboard"
+          >
+            <span
+              className={`w-2 h-2 rounded-full ${
+                telemetry.connected ? "bg-emerald-400 animate-pulse" : "bg-brand-gold"
+              }`}
+            />
+            <Database className="w-3 h-3 text-brand-gold" />
+            <span>{telemetry.connected ? "DB Live" : "CMS"}</span>
+          </Link>
           <button
             onClick={onOpenConsultation}
             className="px-5 py-2.5 rounded-full bg-gold-gradient text-black font-semibold text-sm shadow-gold-sm hover:shadow-gold-md hover:scale-[1.02] transition-all"
@@ -160,51 +168,59 @@ export default function Navbar({ onOpenConsultation }) {
         </button>
       </div>
 
+      {/* Full-Screen Opaque Mobile Drawer */}
       {mobileMenuOpen && (
-            <div className="lg:hidden bg-black/95 backdrop-blur-xl border-t border-zinc-800 mt-3 px-6 py-6 space-y-4 relative z-[9999999]">          <div className="grid grid-cols-1 gap-2">
-            <Link to="/" className="py-2 text-zinc-200 hover:text-brand-gold font-medium">
+        <div className="lg:hidden fixed inset-0 top-[70px] z-[9999999] bg-black/98 backdrop-blur-2xl overflow-y-auto px-6 py-6 space-y-4">
+          <div className="grid grid-cols-1 gap-2">
+            <Link to="/" onClick={() => setMobileMenuOpen(false)} className="py-2 text-zinc-200 hover:text-brand-gold font-medium">
               Home
             </Link>
-            <Link to="/services" className="py-2 text-zinc-200 hover:text-brand-gold font-medium">
-              All Services
+            <Link to="/services" onClick={() => setMobileMenuOpen(false)} className="py-2 text-zinc-200 hover:text-brand-gold font-medium">
+              All Services ({services.length})
             </Link>
             <div className="pl-3 border-l border-brand-gold/30 grid grid-cols-1 gap-1.5 my-1">
-              {SERVICE_LINKS.map((s) => (
+              {services.map((s) => (
                 <Link
                   key={s.slug}
-                  to={s.slug}
+                  to={`/services/${s.slug}`}
+                  onClick={() => setMobileMenuOpen(false)}
                   className="text-xs text-zinc-400 hover:text-brand-gold py-1"
                 >
-                  {s.name}
+                  {s.title}
                 </Link>
               ))}
             </div>
-            <Link to="/portfolio" className="py-2 text-zinc-200 hover:text-brand-gold font-medium">
+            <Link to="/portfolio" onClick={() => setMobileMenuOpen(false)} className="py-2 text-zinc-200 hover:text-brand-gold font-medium">
               Portfolio
             </Link>
-            <Link to="/about" className="py-2 text-zinc-200 hover:text-brand-gold font-medium">
+            <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="py-2 text-zinc-200 hover:text-brand-gold font-medium">
               About
             </Link>
-            <Link to="/blog" className="py-2 text-zinc-200 hover:text-brand-gold font-medium">
+            <Link to="/blog" onClick={() => setMobileMenuOpen(false)} className="py-2 text-zinc-200 hover:text-brand-gold font-medium">
               Blog
             </Link>
-            <Link to="/careers" className="py-2 text-zinc-200 hover:text-brand-gold font-medium">
+            <Link to="/careers" onClick={() => setMobileMenuOpen(false)} className="py-2 text-zinc-200 hover:text-brand-gold font-medium">
               Careers
             </Link>
             <Link
               to="/business-health-checkup"
+              onClick={() => setMobileMenuOpen(false)}
               className="py-2 text-brand-gold font-semibold flex items-center gap-2"
             >
               <Sparkles className="w-4 h-4" /> Business Health Checkup
             </Link>
             <Link
               to="/software-project-planning-guide"
+              onClick={() => setMobileMenuOpen(false)}
               className="py-2 text-zinc-300 hover:text-brand-gold text-sm"
             >
               Download Project Planning Guide
             </Link>
-            <Link to="/contact" className="py-2 text-zinc-200 hover:text-brand-gold font-medium">
+            <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="py-2 text-zinc-200 hover:text-brand-gold font-medium">
               Contact
+            </Link>
+            <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="py-2 text-brand-goldLight font-mono text-xs">
+              Admin Dashboard & Dynamic CMS
             </Link>
           </div>
           <button
@@ -212,7 +228,7 @@ export default function Navbar({ onOpenConsultation }) {
               setMobileMenuOpen(false);
               onOpenConsultation();
             }}
-            className="w-full py-3 rounded-full bg-gold-gradient text-black font-semibold text-sm shadow-gold-sm"
+            className="w-full py-3.5 rounded-full bg-gold-gradient text-black font-semibold text-sm shadow-gold-sm"
           >
             Book a Free Consultation
           </button>

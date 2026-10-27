@@ -24,7 +24,8 @@ export default function ConsultationModal({ isOpen, onClose }) {
   };
 
   return (
-<div className="fixed inset-0 z-[99999999] isolate flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">      <div className="glass-panel metallic-border rounded-3xl max-w-lg w-full p-6 sm:p-8 relative shadow-gold-md">
+    <div className="fixed inset-0 z-[99999999] isolate flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl">
+      <div className="glass-panel metallic-border rounded-3xl max-w-lg w-full p-6 sm:p-8 relative shadow-gold-md">
         <button
           onClick={onClose}
           className="absolute top-5 right-5 p-2 rounded-full text-zinc-400 hover:text-white hover:bg-zinc-800/60"
@@ -36,9 +37,9 @@ export default function ConsultationModal({ isOpen, onClose }) {
         {status === "success" ? (
           <div className="text-center py-8 space-y-4">
             <CheckCircle2 className="w-14 h-14 text-brand-gold mx-auto" />
-            <h3 className="text-2xl font-bold text-white">Consultation Requested</h3>
+            <h3 className="text-2xl font-bold text-white">Consultation Saved to MongoDB</h3>
             <p className="text-sm text-zinc-400 max-w-sm mx-auto">
-              Thank you, {formData.name}. Our solutions architect will reach out shortly to confirm your strategy session.
+              Thank you, {formData.name}. Your strategy session request has been persisted via POST /api/consultation and is live in the Admin Dashboard.
             </p>
             <button
               onClick={() => {

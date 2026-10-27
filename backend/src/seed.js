@@ -1,3 +1,11 @@
+import dns from "node:dns";
+
+// Fix querySrv ECONNREFUSED on local ISPs / routers by resolving via Google DNS
+try {
+  dns.setServers(["8.8.8.8", "1.1.1.1"]);
+} catch (e) {
+  // fallback
+}
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import {

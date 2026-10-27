@@ -16,8 +16,8 @@ import TechConstellation3D from "../components/three/TechConstellation3D";
 import ServiceVisualizer3D from "../components/three/ServiceVisualizer3D";
 import ScrollStoryTimeline from "../components/animations/ScrollStoryTimeline";
 import MagneticTiltCard from "../components/animations/MagneticTiltCard";
-import { SERVICES_DATA } from "../data/servicesData";
-import { PORTFOLIO_DATA } from "../data/portfolioData";
+import { useContent } from "../context/ContentContext";
+import AISolutionsArchitect from "../components/ai/AISolutionsArchitect";
 
 const TRANSFORMATION_STEPS = [
   {
@@ -390,6 +390,9 @@ export default function Home({ onOpenConsultation }) {
           </div>
         </div>
       </section>
+
+      {/* INTERACTIVE AI SOLUTIONS ARCHITECT CONSOLE (AI + BACKEND + MONGODB) */}
+      <AISolutionsArchitect />
 
       {/* FEATURED PORTFOLIO CASE STUDIES PREVIEW */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
