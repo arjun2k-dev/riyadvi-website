@@ -45,7 +45,6 @@ export default function JobDetail() {
       </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        {/* Job Specification */}
         <div className="lg:col-span-7 space-y-8">
           <div className="glass-panel rounded-3xl p-8 border border-zinc-800 space-y-4">
             <span className="px-3 py-1 rounded-full glass-gold text-brand-gold text-xs font-semibold">
@@ -94,7 +93,6 @@ export default function JobDetail() {
           </div>
         </div>
 
-        {/* Job Application Form */}
         <div className="lg:col-span-5">
           <div className="glass-panel metallic-border rounded-3xl p-8 sticky top-24">
             <span className="text-xs uppercase tracking-widest text-brand-gold font-semibold">
@@ -109,7 +107,7 @@ export default function JobDetail() {
                 <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
                 <h3 className="text-lg font-bold text-white">Application Submitted!</h3>
                 <p className="text-xs text-zinc-300">
-                  Your application for {job.title} has been saved to our MongoDB Recruitment Database and is visible in the `/admin` portal.
+                  Your application for {job.title} has been received. Our recruitment team will review your profile and reach out regarding next steps.
                 </p>
               </div>
             ) : (

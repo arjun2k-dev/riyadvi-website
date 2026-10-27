@@ -31,7 +31,6 @@ export default function Contact() {
   });
   const [status, setStatus] = useState("idle");
 
-  // Built-in Interactive Calendly Discovery Call Scheduler state (saves directly to MongoDB)
   const [showScheduler, setShowScheduler] = useState(false);
   const [bookingForm, setBookingForm] = useState({
     name: "",
@@ -44,7 +43,7 @@ export default function Contact() {
   });
   const [bookingStatus, setBookingStatus] = useState("idle");
 
-  const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || "918072487427";
+  const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || "919876543210";
   const customCalendlyUrl = import.meta.env.VITE_CALENDLY_URL || "";
 
   const handleSubmit = async (e) => {
@@ -84,11 +83,10 @@ export default function Contact() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        {/* Main Contact Enquiry Form (7 Cols) */}
         <div className="lg:col-span-7 glass-panel metallic-border rounded-3xl p-8 md:p-10">
           <h2 className="text-2xl font-bold text-white mb-2">Send a Project Enquiry</h2>
           <p className="text-xs text-zinc-400 mb-6">
-            Connected to `POST /api/contact` • Persisted in MongoDB Atlas + visible in `/admin`.
+            Fill in your details below and our team will get back to you with a tailored technical proposal within 24 hours.
           </p>
 
           {status === "success" ? (
@@ -97,7 +95,7 @@ export default function Contact() {
               <h3 className="text-xl font-bold text-white">Enquiry Received!</h3>
               <p className="text-sm text-zinc-300">
                 Thank you, {form.name}. Your requirement for{" "}
-                <span className="text-brand-gold font-semibold">{form.requirement}</span> has been logged in our MongoDB database and routed to our solutions architect.
+                <span className="text-brand-gold font-semibold">{form.requirement}</span> has been received and routed to our solutions architect.
               </p>
               <button
                 onClick={() => {
@@ -149,7 +147,7 @@ export default function Contact() {
                   <input
                     type="tel"
                     required
-                    placeholder="your phone number"
+                    placeholder="+91 98765 43210"
                     value={form.phone}
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl bg-zinc-900 border border-zinc-800 text-sm text-white focus:border-brand-gold focus:outline-none"
@@ -209,9 +207,7 @@ export default function Contact() {
           )}
         </div>
 
-        {/* Direct Integrations: WhatsApp, Embedded Calendly Slot Scheduler & Location Map (5 Cols) */}
         <div className="lg:col-span-5 space-y-6">
-          {/* WhatsApp Direct Integration */}
           <div className="glass-gold rounded-3xl p-6 space-y-3">
             <div className="flex items-center gap-2 text-brand-gold text-xs uppercase tracking-widest font-semibold">
               <MessageSquare className="w-4 h-4" />
@@ -234,7 +230,6 @@ export default function Contact() {
             </a>
           </div>
 
-          {/* Interactive Calendly 30-Minute Discovery Call Scheduler (Zero 404s, Direct DB Persistence) */}
           <div className="glass-panel rounded-3xl p-6 border border-zinc-800 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-brand-gold text-xs uppercase tracking-widest font-semibold">
@@ -258,7 +253,7 @@ export default function Contact() {
                 </div>
                 <p className="text-zinc-300">
                   Booked for <span className="text-brand-gold font-semibold">{bookingForm.date}</span> at{" "}
-                  <span className="text-brand-gold font-semibold">{bookingForm.slot}</span>. Saved to MongoDB Consultation Requests.
+                  <span className="text-brand-gold font-semibold">{bookingForm.slot}</span>. An invite has been generated and our engineering lead will join you at the scheduled time.
                 </p>
                 <button
                   type="button"
@@ -370,7 +365,6 @@ export default function Contact() {
             )}
           </div>
 
-          {/* Contact Details & Location Map Card */}
           <div className="glass-panel rounded-3xl p-6 border border-zinc-800 space-y-4">
             <h3 className="text-lg font-bold text-white">Corporate Headquarters</h3>
             <div className="space-y-2.5 text-xs text-zinc-300">

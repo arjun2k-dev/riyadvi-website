@@ -13,17 +13,17 @@ export default function ServicesOverview() {
       <div className="text-center max-w-3xl mx-auto space-y-4">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-gold text-brand-goldLight text-xs font-semibold">
           <Sparkles className="w-3.5 h-3.5 text-brand-gold" />
-          <span>Dynamic MongoDB Service Architecture • {services.length} Live Practices</span>
+          <span>Enterprise Digital Solutions • {services.length} Core Practices</span>
         </div>
         <h1 className="text-4xl md:text-6xl font-extrabold text-white">
           Core <span className="text-gold-gradient">Digital Solutions</span>
         </h1>
         <p className="text-zinc-400 text-sm md:text-base">
-          Every practice combines custom full-stack engineering, interactive 3D WebGL visualization, and measurable business growth outcomes fetched dynamically via REST API.
+          Every practice combines custom full-stack engineering, interactive 3D WebGL visualization, and measurable business growth outcomes.
         </p>
         <div className="inline-flex items-center gap-2 text-[11px] text-zinc-400 font-mono">
           <Database className="w-3.5 h-3.5 text-brand-gold" />
-          <span>Source: {telemetry.source} ({services.length} active service documents)</span>
+          <span>Cloud-Native Dynamic Architecture • {services.length} Verified Capabilities</span>
         </div>
       </div>
 

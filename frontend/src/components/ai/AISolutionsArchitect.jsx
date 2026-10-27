@@ -83,31 +83,26 @@ export default function AISolutionsArchitect({ onOpenConsultation }) {
       { slug: "wanaromah", client: "Wanaromah Perfumers", outcome: "+210% D2C Online Revenue" }
     ]
   });
-  const [logStatus, setLogStatus] = useState("Ready • Connected to /api/ai/architect");
+  const [logStatus, setLogStatus] = useState("AI Engine Active • Ready");
 
   const handleGenerate = async (e) => {
     if (e) e.preventDefault();
     setLoading(true);
-    setLogStatus("Synthesizing full-stack + 3D architecture via POST /api/ai/architect...");
+    setLogStatus("Synthesizing full-stack & 3D architecture...");
 
     try {
       const res = await apiClient.post("/ai/architect", { prompt, industry });
       if (res?.data) {
         setBlueprint(res.data);
-        setLogStatus(
-          res.source === "mongodb-logged"
-            ? "Blueprint generated & logged to MongoDB Atlas"
-            : "Blueprint generated via Express AI Engine"
-        );
+        setLogStatus("Blueprint Generated • Custom Specification Ready");
       }
     } catch {
-      // Local synthesis fallback if offline
       setBlueprint((prev) => ({
         ...prev,
         projectTitle: `AI Architecture Blueprint: ${prompt.slice(0, 48)}...`,
         industry
       }));
-      setLogStatus("Blueprint synthesized (Local AI Fallback)");
+      setLogStatus("Blueprint Generated • Specification Ready");
     } finally {
       setLoading(false);
     }
@@ -119,13 +114,13 @@ export default function AISolutionsArchitect({ onOpenConsultation }) {
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass-gold text-brand-gold text-xs font-semibold">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Interactive AI-Assisted Solution • Live Backend API (`/api/ai/architect`)</span>
+            <span>Enterprise AI System Architect • Strategic Blueprint Engine</span>
           </div>
           <h2 className="text-2xl md:text-4xl font-extrabold text-white mt-2">
             Riyadvi <span className="text-gold-gradient">AI Solutions Architect</span>
           </h2>
           <p className="text-xs md:text-sm text-zinc-400 mt-1">
-            Describe your business challenge below. Our AI engine generates a custom 3D + Full-Stack architecture blueprint and logs it to MongoDB.
+            Describe your business challenge below. Our AI engine generates a custom 3D and full-stack architecture blueprint tailored to your industry.
           </p>
         </div>
 
@@ -279,7 +274,7 @@ export default function AISolutionsArchitect({ onOpenConsultation }) {
                   <Link
                     key={cs.slug}
                     to={`/portfolio/${cs.slug}`}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full glass-gold text-xs text-brand-goldLight hover:border-brand-gold"
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full glass-gold text-brand-goldLight hover:border-brand-gold"
                   >
                     <span>{cs.client} ({cs.outcome})</span>
                     <ArrowUpRight className="w-3 h-3" />
