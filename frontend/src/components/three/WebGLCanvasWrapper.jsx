@@ -5,9 +5,9 @@ import { Sparkles } from "lucide-react";
 
 /**
  * Performance-optimized WebGL wrapper (Sections 29 & 30):
- * - Uses IntersectionObserver to pause rendering when off-screen
+ * - Mounts WebGL <Canvas> only when near/in viewport via IntersectionObserver so browsers never hit WebGL context limits
  * - Adjusts DPR for mobile/low-power GPUs
- * - Provides an interactive fallback option on ultra-low-end devices or if WebGL fails
+ * - Provides an interactive fallback option on ultra-low-end devices or if WebGL context is lost
  */
 export default function WebGLCanvasWrapper({
   children,
@@ -19,7 +19,7 @@ export default function WebGLCanvasWrapper({
 }) {
   const { isMobile, isLowPower, dpr } = useDevicePerformance();
   const containerRef = useRef(null);
-  const [isInView, setIsInView] = useState(true);
+  const [isInView, setIsInView] = useState(false);
   const [webglError, setWebglError] = useState(false);
   const [forceLiteMode, setForceLiteMode] = useState(false);
 
@@ -31,7 +31,7 @@ export default function WebGLCanvasWrapper({
       ([entry]) => {
         setIsInView(entry.isIntersecting);
       },
-      { rootMargin: "150px" }
+      { rootMargin: "120px" }
     );
 
     observer.observe(el);
@@ -46,7 +46,10 @@ export default function WebGLCanvasWrapper({
       <div className="absolute top-3 right-3 z-20 flex items-center gap-2">
         <button
           type="button"
-          onClick={() => setForceLiteMode((prev) => !prev)}
+          onClick={() => {
+            setWebglError(false);
+            setForceLiteMode((prev) => !prev);
+          }}
           className="px-2.5 py-1 rounded-full text-[10px] uppercase tracking-wider font-mono glass-panel text-zinc-400 hover:text-brand-gold border border-zinc-800 hover:border-brand-gold/40 transition-colors"
           title="Toggle between real-time WebGL 3D and lightweight mobile fallback"
         >
@@ -56,11 +59,18 @@ export default function WebGLCanvasWrapper({
 
       {showFallback ? (
         <div className="w-full h-full rounded-3xl glass-gold flex flex-col items-center justify-center p-8 text-center relative overflow-hidden">
-          <div className="w-28 h-28 rounded-full bg-gold-gradient/20 border border-brand-gold/40 flex items-center justify-center animate-pulse mb-4 shadow-gold-md">
-            <Sparkles className="w-10 h-10 text-brand-gold" />
+          <div className="w-24 h-24 rounded-full bg-gold-gradient/20 border border-brand-gold/40 flex items-center justify-center animate-pulse mb-4 shadow-gold-md">
+            <Sparkles className="w-9 h-9 text-brand-gold" />
           </div>
           <h4 className="text-lg font-bold text-gold-gradient">{fallbackTitle}</h4>
           <p className="text-xs text-zinc-400 max-w-sm mt-2">{fallbackSubtitle}</p>
+        </div>
+      ) : !isInView ? (
+        <div className="w-full h-full flex flex-col items-center justify-center rounded-3xl bg-zinc-950/60 border border-zinc-900">
+          <div className="w-8 h-8 rounded-full border-2 border-brand-gold/20 border-t-brand-gold animate-spin mb-2" />
+          <span className="text-[10px] uppercase tracking-[0.2em] text-brand-gold/70 font-mono">
+            3D Viewport Standby
+          </span>
         </div>
       ) : (
         <Suspense
@@ -76,10 +86,18 @@ export default function WebGLCanvasWrapper({
           <Canvas
             camera={camera}
             dpr={dpr}
-            frameloop={isInView ? "always" : "never"}
-            gl={{ antialias: !isLowPower, alpha: true, powerPreference: "high-performance" }}
+            gl={{ antialias: !isLowPower, alpha: true, powerPreference: "default" }}
             onCreated={({ gl }) => {
               gl.setClearColor(0x000000, 0);
+              const canvas = gl.domElement;
+              canvas.addEventListener(
+                "webglcontextlost",
+                (e) => {
+                  e.preventDefault();
+                  setWebglError(true);
+                },
+                false
+              );
             }}
             onError={() => setWebglError(true)}
           >

@@ -257,7 +257,7 @@ router.post("/admin/content/:type", async (req, res, next) => {
     const { type } = req.params;
     const payload = req.body;
 
-    if (type === "service") {
+    if (type === "service" || type === "services") {
       const slug =
         payload.slug ||
         payload.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -332,7 +332,7 @@ router.post("/admin/content/:type", async (req, res, next) => {
       return res.status(201).json({ success: true, message: "Dynamic Case Study published!", data: created });
     }
 
-    if (type === "blog") {
+    if (type === "blog" || type === "blogs") {
       const slug =
         payload.slug ||
         payload.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -361,7 +361,7 @@ router.post("/admin/content/:type", async (req, res, next) => {
       return res.status(201).json({ success: true, message: "Dynamic Blog Article published!", data: created });
     }
 
-    if (type === "career") {
+    if (type === "career" || type === "careers") {
       const jobSlug =
         payload.jobSlug ||
         payload.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");

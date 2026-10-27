@@ -3,16 +3,27 @@ import { useFrame } from "@react-three/fiber";
 import { Float, OrbitControls, Sparkles } from "@react-three/drei";
 import WebGLCanvasWrapper from "./WebGLCanvasWrapper";
 
-/**
- * 6-Mode Interactive 3D Visualizer for Services (Sections 13 & 19):
- * - web-development: 3D layered browser & cloud stack
- * - app-development: 3D interactive smartphone device
- * - digital-marketing: 3D ascending growth bars & orbital ring
- * - ar-vr: 3D spatial torus knot portal
- * - 3d-modeling: Rotatable dual wireframe + metallic polyhedron
- * - ui-ux-design: Floating glassmorphic interface planes
- */
-function ServiceModel({ slug = "web-development" }) {
+const KNOWN_SLUGS = [
+  "web-development",
+  "app-development",
+  "digital-marketing",
+  "ar-vr",
+  "3d-modeling",
+  "ui-ux-design"
+];
+
+function resolveServiceSlug(slug, variant) {
+  if (slug && KNOWN_SLUGS.includes(slug)) return slug;
+  const v = (variant || slug || "").toLowerCase();
+  if (v.includes("app") || v.includes("mobile")) return "app-development";
+  if (v.includes("market") || v.includes("seo") || v.includes("growth")) return "digital-marketing";
+  if (v.includes("ar") || v.includes("vr") || v.includes("spatial")) return "ar-vr";
+  if (v.includes("3d") || v.includes("model") || v.includes("webgl")) return "3d-modeling";
+  if (v.includes("ui") || v.includes("ux") || v.includes("design")) return "ui-ux-design";
+  return "web-development";
+}
+
+function ServiceModel({ mode = "web-development" }) {
   const groupRef = useRef();
 
   useFrame((_, delta) => {
@@ -31,19 +42,16 @@ function ServiceModel({ slug = "web-development" }) {
 
       <Float speed={2} rotationIntensity={0.35} floatIntensity={0.55}>
         <group ref={groupRef}>
-          {slug === "web-development" && (
+          {mode === "web-development" && (
             <group>
-              {/* Main Browser Frame */}
               <mesh position={[0, 0, 0]}>
                 <boxGeometry args={[2.6, 1.65, 0.12]} />
                 <meshStandardMaterial color="#141418" metalness={0.8} roughness={0.2} />
               </mesh>
-              {/* Gold Header Bar */}
               <mesh position={[0, 0.65, 0.08]}>
                 <boxGeometry args={[2.4, 0.2, 0.06]} />
                 <meshStandardMaterial color="#D4AF37" metalness={0.9} roughness={0.15} />
               </mesh>
-              {/* Floating Code Blocks */}
               <mesh position={[-0.6, -0.1, 0.22]}>
                 <boxGeometry args={[0.95, 0.85, 0.08]} />
                 <meshStandardMaterial color="#D4AF37" emissive="#8A6B10" emissiveIntensity={0.3} metalness={0.85} roughness={0.2} />
@@ -55,19 +63,16 @@ function ServiceModel({ slug = "web-development" }) {
             </group>
           )}
 
-          {slug === "app-development" && (
+          {mode === "app-development" && (
             <group>
-              {/* 3D Smartphone Body */}
               <mesh>
                 <boxGeometry args={[1.35, 2.65, 0.16]} />
                 <meshStandardMaterial color="#111115" metalness={0.9} roughness={0.15} />
               </mesh>
-              {/* Gold Bezel Rim */}
               <mesh scale={[1.04, 1.02, 0.9]}>
                 <boxGeometry args={[1.35, 2.65, 0.15]} />
                 <meshStandardMaterial color="#D4AF37" metalness={0.95} roughness={0.1} wireframe />
               </mesh>
-              {/* Floating App UI Cards */}
               <mesh position={[0, 0.5, 0.2]}>
                 <boxGeometry args={[1.05, 0.55, 0.06]} />
                 <meshStandardMaterial color="#D4AF37" metalness={0.85} roughness={0.2} />
@@ -79,9 +84,8 @@ function ServiceModel({ slug = "web-development" }) {
             </group>
           )}
 
-          {slug === "digital-marketing" && (
+          {mode === "digital-marketing" && (
             <group position={[0, -0.6, 0]}>
-              {/* Ascending 3D Analytics Bars */}
               {[
                 { x: -0.9, h: 0.8, c: "#8A6B10" },
                 { x: -0.3, h: 1.3, c: "#D4AF37" },
@@ -93,7 +97,6 @@ function ServiceModel({ slug = "web-development" }) {
                   <meshStandardMaterial color={bar.c} metalness={0.85} roughness={0.18} />
                 </mesh>
               ))}
-              {/* Orbiting Growth Ring */}
               <mesh position={[0, 1.2, 0]} rotation={[Math.PI / 3, 0.3, 0]}>
                 <torusGeometry args={[1.65, 0.03, 16, 80]} />
                 <meshStandardMaterial color="#D4AF37" emissive="#D4AF37" emissiveIntensity={0.4} />
@@ -101,7 +104,7 @@ function ServiceModel({ slug = "web-development" }) {
             </group>
           )}
 
-          {slug === "ar-vr" && (
+          {mode === "ar-vr" && (
             <group>
               <mesh>
                 <torusKnotGeometry args={[1.05, 0.28, 128, 32]} />
@@ -120,7 +123,7 @@ function ServiceModel({ slug = "web-development" }) {
             </group>
           )}
 
-          {slug === "3d-modeling" && (
+          {mode === "3d-modeling" && (
             <group>
               <mesh>
                 <dodecahedronGeometry args={[1.35, 0]} />
@@ -133,7 +136,7 @@ function ServiceModel({ slug = "web-development" }) {
             </group>
           )}
 
-          {slug === "ui-ux-design" && (
+          {mode === "ui-ux-design" && (
             <group>
               <mesh position={[-0.35, 0.25, -0.2]} rotation={[0, 0.2, 0]}>
                 <boxGeometry args={[1.9, 1.25, 0.08]} />
@@ -156,17 +159,19 @@ function ServiceModel({ slug = "web-development" }) {
 }
 
 export default function ServiceVisualizer3D({
-  slug = "web-development",
-  className = "w-full h-[320px] md:h-[380px]"
+  slug,
+  variant,
+  className = "w-full h-[280px] md:h-[340px]"
 }) {
+  const mode = resolveServiceSlug(slug, variant);
   return (
     <WebGLCanvasWrapper
       className={className}
       camera={{ position: [0, 0, 5.2], fov: 45 }}
-      fallbackTitle={`3D ${slug.replace("-", " ").toUpperCase()} Visualizer`}
+      fallbackTitle={`3D ${mode.replace(/-/g, " ").toUpperCase()} Visualizer`}
       fallbackSubtitle="Interactive 3D service preview."
     >
-      <ServiceModel slug={slug} />
+      <ServiceModel mode={mode} />
     </WebGLCanvasWrapper>
   );
 }

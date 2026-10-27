@@ -57,25 +57,30 @@ function CaseStudyStage({ accentColor = "#D4AF37" }) {
 }
 
 export default function CaseStudyShowcase3D({
+  client,
   projectTitle = "Laxmi Astro AI",
+  highlightMetric,
   metricLabel = "+240% User Engagement",
   accentColor = "#D4AF37"
 }) {
+  const displayTitle = client || projectTitle;
+  const displayMetric = highlightMetric || metricLabel;
+
   return (
     <div className="glass-panel metallic-border rounded-3xl p-4">
       <WebGLCanvasWrapper
         className="w-full h-[340px] md:h-[400px]"
         camera={{ position: [0, 0.3, 5.5], fov: 45 }}
-        fallbackTitle={`${projectTitle} — 3D Interactive Case Study`}
-        fallbackSubtitle={`Outcome: ${metricLabel}`}
+        fallbackTitle={`${displayTitle} — 3D Interactive Case Study`}
+        fallbackSubtitle={`Outcome: ${displayMetric}`}
       >
         <CaseStudyStage accentColor={accentColor} />
       </WebGLCanvasWrapper>
 
       <div className="mt-2 px-3 py-2 border-t border-zinc-800/80 flex items-center justify-between text-xs">
-        <span className="font-bold text-white">{projectTitle} • 3D Device Twin</span>
+        <span className="font-bold text-white">{displayTitle} • 3D Device Twin</span>
         <span className="px-3 py-0.5 rounded-full bg-brand-gold/15 border border-brand-gold/40 text-brand-gold font-mono font-semibold">
-          {metricLabel}
+          {displayMetric}
         </span>
       </div>
     </div>

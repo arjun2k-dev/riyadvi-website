@@ -28,7 +28,7 @@ export default function JobDetail() {
     setStatus("submitting");
     await submitLeadWithFallback("/applications", "applications", {
       ...form,
-      jobSlug: job.slug,
+      jobSlug: job.jobSlug || job.slug,
       department: job.department
     });
     setStatus("success");
@@ -49,7 +49,7 @@ export default function JobDetail() {
         <div className="lg:col-span-7 space-y-8">
           <div className="glass-panel rounded-3xl p-8 border border-zinc-800 space-y-4">
             <span className="px-3 py-1 rounded-full glass-gold text-brand-gold text-xs font-semibold">
-              {job.department} • {job.type}
+              {job.department} • {job.type || "Full-Time"}
             </span>
             <h1 className="text-3xl md:text-4xl font-extrabold text-white">{job.title}</h1>
             <div className="flex flex-wrap gap-4 text-xs text-zinc-400">
@@ -62,7 +62,9 @@ export default function JobDetail() {
                 {job.location}
               </span>
             </div>
-            <p className="text-zinc-300 text-sm leading-relaxed pt-2">{job.overview}</p>
+            <p className="text-zinc-300 text-sm leading-relaxed pt-2">
+              {job.summary || job.overview}
+            </p>
           </div>
 
           <div className="glass-panel rounded-3xl p-8 border border-zinc-800 space-y-6">
@@ -107,7 +109,7 @@ export default function JobDetail() {
                 <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
                 <h3 className="text-lg font-bold text-white">Application Submitted!</h3>
                 <p className="text-xs text-zinc-300">
-                  Your application for {job.title} has been saved to our MongoDB Recruitment Database and visible in the `/admin` portal.
+                  Your application for {job.title} has been saved to our MongoDB Recruitment Database and is visible in the `/admin` portal.
                 </p>
               </div>
             ) : (

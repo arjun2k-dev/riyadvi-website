@@ -88,42 +88,45 @@ export default function CareersHub() {
 
       {/* Job Listings */}
       <div className="space-y-4">
-        {filteredJobs.map((job) => (
-          <div
-            key={job.slug}
-            className="glass-panel rounded-2xl p-6 md:p-8 border border-zinc-800 hover:border-brand-gold/50 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6"
-          >
-            <div className="space-y-2">
-              <div className="flex flex-wrap items-center gap-2.5 text-xs">
-                <span className="px-3 py-1 rounded-full glass-gold text-brand-gold font-semibold">
-                  {job.department}
-                </span>
-                <span className="text-zinc-400 flex items-center gap-1">
-                  <Briefcase className="w-3.5 h-3.5 text-brand-gold" />
-                  {job.designation}
-                </span>
-                <span className="text-zinc-400 flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5 text-brand-gold" />
-                  {job.experience}
-                </span>
-                <span className="text-zinc-400 flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5 text-brand-gold" />
-                  {job.location}
-                </span>
-              </div>
-              <h2 className="text-2xl font-bold text-white">{job.title}</h2>
-              <p className="text-xs text-zinc-400 max-w-2xl">{job.overview}</p>
-            </div>
-
-            <Link
-              to={`/careers/${job.slug}`}
-              className="px-6 py-3.5 rounded-full bg-gold-gradient text-black font-bold text-xs shadow-gold-sm inline-flex items-center gap-2 shrink-0 self-start md:self-center"
+        {filteredJobs.map((job) => {
+          const jobKey = job.jobSlug || job.slug;
+          return (
+            <div
+              key={jobKey}
+              className="glass-panel rounded-2xl p-6 md:p-8 border border-zinc-800 hover:border-brand-gold/50 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6"
             >
-              <span>View Role & Apply</span>
-              <ArrowUpRight className="w-4 h-4" />
-            </Link>
-          </div>
-        ))}
+              <div className="space-y-2">
+                <div className="flex flex-wrap items-center gap-2.5 text-xs">
+                  <span className="px-3 py-1 rounded-full glass-gold text-brand-gold font-semibold">
+                    {job.department}
+                  </span>
+                  <span className="text-zinc-400 flex items-center gap-1">
+                    <Briefcase className="w-3.5 h-3.5 text-brand-gold" />
+                    {job.designation}
+                  </span>
+                  <span className="text-zinc-400 flex items-center gap-1">
+                    <Clock className="w-3.5 h-3.5 text-brand-gold" />
+                    {job.experience}
+                  </span>
+                  <span className="text-zinc-400 flex items-center gap-1">
+                    <MapPin className="w-3.5 h-3.5 text-brand-gold" />
+                    {job.location}
+                  </span>
+                </div>
+                <h2 className="text-2xl font-bold text-white">{job.title}</h2>
+                <p className="text-xs text-zinc-400 max-w-2xl">{job.summary || job.overview}</p>
+              </div>
+
+              <Link
+                to={`/careers/${jobKey}`}
+                className="px-6 py-3.5 rounded-full bg-gold-gradient text-black font-bold text-xs shadow-gold-sm inline-flex items-center gap-2 shrink-0 self-start md:self-center"
+              >
+                <span>View Role & Apply</span>
+                <ArrowUpRight className="w-4 h-4" />
+              </Link>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

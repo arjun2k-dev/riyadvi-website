@@ -33,7 +33,7 @@ export default function ServicesOverview() {
             <div className="space-y-5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono text-brand-gold px-3 py-1 rounded-full bg-brand-gold/10 border border-brand-gold/30">
-                  0{index + 1} • {service.badge}
+                  0{index + 1} • {service.visualType || service.badge || "3D Interactive"}
                 </span>
                 <Link
                   to={`/services/${service.slug}`}
@@ -44,20 +44,20 @@ export default function ServicesOverview() {
                 </Link>
               </div>
 
-              <ServiceVisualizer3D variant={service.visualType || "web"} />
+              <ServiceVisualizer3D slug={service.slug} variant={service.visualType} />
 
               <div>
                 <h2 className="text-2xl md:text-3xl font-bold text-white">{service.title}</h2>
                 <p className="text-xs text-brand-goldLight font-medium mt-1">{service.tagline}</p>
                 <p className="text-sm text-zinc-400 mt-3 leading-relaxed">
-                  {service.shortDescription}
+                  {service.heroDescription || service.shortDescription}
                 </p>
               </div>
             </div>
 
             <div className="pt-5 border-t border-zinc-800/80 flex flex-wrap items-center justify-between gap-4">
               <div className="flex flex-wrap gap-1.5">
-                {(service.technologies || []).slice(0, 4).map((tech) => (
+                {(service.techStack || service.technologies || []).slice(0, 4).map((tech) => (
                   <span
                     key={tech}
                     className="px-2.5 py-1 rounded-md text-[11px] bg-zinc-900 border border-zinc-800 text-zinc-300"

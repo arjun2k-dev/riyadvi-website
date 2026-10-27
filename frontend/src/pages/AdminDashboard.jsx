@@ -17,13 +17,13 @@ import { apiClient } from "../api/client";
 import { getLocalLeads } from "../utils/leadStorage";
 import { useContent } from "../context/ContentContext";
 
-/**
- * 28. FULL-STACK ADMIN & DYNAMIC CMS DASHBOARD (/admin)
- * Displays:
- * - Total enquiries, Consultation requests, Health Checkup leads, Lead Magnet leads, Job applications, AI Blueprints
- * - Live Status Updater (PATCH /api/admin/status/:collection/:id)
- * - Dynamic CMS Publisher (POST /api/admin/content/:type) to create new Services, Case Studies, Blogs, or Career Jobs in MongoDB
- */
+function formatDate(item) {
+  const raw = item?.createdAt || item?.date;
+  if (!raw) return "Recent";
+  const d = new Date(raw);
+  return isNaN(d.getTime()) ? String(raw) : d.toLocaleDateString();
+}
+
 export default function AdminDashboard() {
   const { services, portfolio, blogs, careers, refreshContent } = useContent();
   const [store, setStore] = useState(() => ({
@@ -35,8 +35,8 @@ export default function AdminDashboard() {
   const [dataSource, setDataSource] = useState("Syncing with MongoDB Atlas...");
   const [loading, setLoading] = useState(false);
 
-  // Dynamic CMS state
-  const [cmsType, setCmsType] = useState("services");
+  // Dynamic CMS state (uses singular "service", "portfolio", "blog", "career" to match backend API)
+  const [cmsType, setCmsType] = useState("service");
   const [cmsStatus, setCmsStatus] = useState("");
   const [cmsForm, setCmsForm] = useState({
     title: "",
@@ -46,7 +46,7 @@ export default function AdminDashboard() {
     category: "AI & Automation",
     department: "Engineering",
     summary: "",
-    technologies: "React, Three.js, Node.js, MongoDB"
+    technologies: "React.js, Three.js, Node.js, MongoDB"
   });
 
   const fetchDashboardData = async () => {
@@ -92,55 +92,39 @@ export default function AdminDashboard() {
       .filter(Boolean);
 
     let payload = {};
-    if (cmsType === "services") {
+    if (cmsType === "service") {
       payload = {
         slug: cleanSlug,
         title: cmsForm.title,
         shortTitle: cmsForm.title,
         tagline: cmsForm.tagline || "Enterprise Digital Engineering Practice",
-        badge: "Dynamic MongoDB Service",
-        visualType: "web",
-        shortDescription: cmsForm.summary,
+        visualType: "Interactive 3D Visualizer",
+        heroDescription: cmsForm.summary,
         problem: "Organizations struggle with legacy bottlenecks and fragmented user experiences.",
         solution: cmsForm.summary,
-        keyFeatures: ["Custom Full-Stack Architecture", "Interactive 3D WebGL UI", "Cloud Auto-Scaling"],
-        industries: ["Enterprise SaaS", "FinTech", "Healthcare"],
-        technologies: techList,
-        metrics: [
-          { value: "+210%", label: "Conversion Velocity" },
-          { value: "99.98%", label: "Cloud Uptime" },
-          { value: "2.4x", label: "Engineering ROI" }
+        keyFeatures: [
+          "Custom Full-Stack React & Node.js Architecture",
+          "Interactive 3D WebGL & GSAP Motion System",
+          "Cloud Auto-Scaling & MongoDB Integration"
         ],
-        relatedSlugs: []
+        techStack: techList
       };
     } else if (cmsType === "portfolio") {
       payload = {
         slug: cleanSlug,
         client: cmsForm.title,
+        title: `${cmsForm.title} — Digital Transformation`,
         industry: cmsForm.industry,
-        timeline: "12 Weeks",
-        has3DShowcase: true,
         summary: cmsForm.summary,
         challenge: "Client required a modern full-stack, 3D-enabled platform to replace legacy workflows.",
         solution: cmsForm.summary,
-        technologies: techList,
-        results: [
-          { metric: "+240%", label: "Qualified Pipeline" },
-          { metric: "1.2s", label: "Page Load Speed" },
-          { metric: "3.5x", label: "User Engagement" }
-        ],
-        visuals: ["3D Command Center", "Real-Time Telemetry API", "Executive Analytics"],
-        relatedServices: ["web-development"]
+        technologies: techList
       };
-    } else if (cmsType === "blogs") {
+    } else if (cmsType === "blog") {
       payload = {
         slug: cleanSlug,
         title: cmsForm.title,
         category: cmsForm.category,
-        readTime: "6 min read",
-        date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-        author: "Riyadvi Editorial Team",
-        featured: false,
         tags: techList,
         excerpt: cmsForm.summary,
         content: [
@@ -148,20 +132,15 @@ export default function AdminDashboard() {
           "Modern digital products require tight integration between 3D spatial interfaces, AI automation, and resilient Node.js + MongoDB backends."
         ]
       };
-    } else if (cmsType === "careers") {
+    } else if (cmsType === "career") {
       payload = {
-        slug: cleanSlug,
+        jobSlug: cleanSlug,
         title: cmsForm.title,
         department: cmsForm.department,
         designation: cmsForm.tagline || "Senior Engineer",
         experience: "2–5 Years",
         location: "Chennai / Hybrid",
-        type: "Full-Time",
-        overview: cmsForm.summary,
-        responsibilities: [
-          "Architect scalable React, Three.js, and Node.js modules",
-          "Collaborate with UI/UX and AI engineering teams"
-        ],
+        summary: cmsForm.summary,
         requirements: techList
       };
     }
@@ -169,7 +148,7 @@ export default function AdminDashboard() {
     try {
       await apiClient.post(`/admin/content/${cmsType}`, payload);
       await refreshContent();
-      setCmsStatus(`Published "${cmsForm.title}" to MongoDB (${cmsType})! It is now live on the website.`);
+      setCmsStatus(`Published "${cmsForm.title}" to MongoDB! Live route created at /${cmsType === "career" ? "careers" : cmsType === "blog" ? "blog" : cmsType === "service" ? "services" : "portfolio"}/${cleanSlug}`);
       setCmsForm({
         ...cmsForm,
         title: "",
@@ -178,7 +157,7 @@ export default function AdminDashboard() {
         summary: ""
       });
     } catch (err) {
-      setCmsStatus("Error publishing content: " + (err?.response?.data?.error || err.message));
+      setCmsStatus("Error publishing content: " + (err?.message || "Check connection"));
     }
   };
 
@@ -357,10 +336,10 @@ export default function AdminDashboard() {
             </div>
             <div className="flex flex-wrap gap-2">
               {[
-                { id: "services", label: `Services (${services.length})` },
+                { id: "service", label: `Services (${services.length})` },
                 { id: "portfolio", label: `Portfolio (${portfolio.length})` },
-                { id: "blogs", label: `Blogs (${blogs.length})` },
-                { id: "careers", label: `Careers (${careers.length})` }
+                { id: "blog", label: `Blogs (${blogs.length})` },
+                { id: "career", label: `Careers (${careers.length})` }
               ].map((t) => (
                 <button
                   key={t.id}
@@ -410,9 +389,9 @@ export default function AdminDashboard() {
               <label className="block text-xs text-zinc-400 mb-1">
                 {cmsType === "portfolio"
                   ? "Industry"
-                  : cmsType === "blogs"
+                  : cmsType === "blog"
                   ? "Article Category"
-                  : cmsType === "careers"
+                  : cmsType === "career"
                   ? "Department"
                   : "Service Tagline"}
               </label>
@@ -422,17 +401,17 @@ export default function AdminDashboard() {
                 value={
                   cmsType === "portfolio"
                     ? cmsForm.industry
-                    : cmsType === "blogs"
+                    : cmsType === "blog"
                     ? cmsForm.category
-                    : cmsType === "careers"
+                    : cmsType === "career"
                     ? cmsForm.department
                     : cmsForm.tagline
                 }
                 onChange={(e) => {
                   const val = e.target.value;
                   if (cmsType === "portfolio") setCmsForm({ ...cmsForm, industry: val });
-                  else if (cmsType === "blogs") setCmsForm({ ...cmsForm, category: val });
-                  else if (cmsType === "careers") setCmsForm({ ...cmsForm, department: val });
+                  else if (cmsType === "blog") setCmsForm({ ...cmsForm, category: val });
+                  else if (cmsType === "career") setCmsForm({ ...cmsForm, department: val });
                   else setCmsForm({ ...cmsForm, tagline: val });
                 }}
                 className="w-full px-4 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-white focus:border-brand-gold focus:outline-none"
@@ -502,8 +481,8 @@ export default function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-800/70 text-xs text-zinc-300">
-                  {filteredContacts.map((item) => (
-                    <tr key={item._id} className="hover:bg-zinc-900/50 transition-colors">
+                  {filteredContacts.map((item, i) => (
+                    <tr key={item._id || item.id || i} className="hover:bg-zinc-900/50 transition-colors">
                       <td className="py-4 px-5 font-bold text-white">{item.name}</td>
                       <td className="py-4 px-5">{item.email}</td>
                       <td className="py-4 px-5">{item.phone}</td>
@@ -513,9 +492,7 @@ export default function AdminDashboard() {
                           {item.requirement}
                         </span>
                       </td>
-                      <td className="py-4 px-5 text-zinc-400">
-                        {new Date(item.createdAt).toLocaleDateString()}
-                      </td>
+                      <td className="py-4 px-5 text-zinc-400">{formatDate(item)}</td>
                       <td className="py-4 px-5">
                         <span className="px-2.5 py-1 rounded-full bg-brand-gold/15 border border-brand-gold/40 text-brand-gold text-[11px] font-semibold">
                           {item.status || "New"}
@@ -542,14 +519,16 @@ export default function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-800/70 text-xs text-zinc-300">
-                  {(store.consultations || []).map((item) => (
-                    <tr key={item._id} className="hover:bg-zinc-900/50">
+                  {(store.consultations || []).map((item, i) => (
+                    <tr key={item._id || item.id || i} className="hover:bg-zinc-900/50">
                       <td className="py-4 px-5 font-bold text-white">{item.name}</td>
                       <td className="py-4 px-5">
                         {item.email} • {item.phone}
                       </td>
                       <td className="py-4 px-5">{item.company || "—"}</td>
-                      <td className="py-4 px-5 text-brand-goldLight">{item.serviceType}</td>
+                      <td className="py-4 px-5 text-brand-goldLight">
+                        {item.serviceInterest || item.serviceType || "Digital Transformation"}
+                      </td>
                       <td className="py-4 px-5 font-mono">{item.preferredDate || "Flexible"}</td>
                       <td className="py-4 px-5">
                         <span className="px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 text-[11px]">
@@ -571,41 +550,30 @@ export default function AdminDashboard() {
                     <th className="py-4 px-5">Contact</th>
                     <th className="py-4 px-5">Company & Industry</th>
                     <th className="py-4 px-5">Digital Score</th>
-                    <th className="py-4 px-5">Recommended Services</th>
+                    <th className="py-4 px-5">Primary Challenge</th>
                     <th className="py-4 px-5">Date</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-800/70 text-xs text-zinc-300">
-                  {(store.healthCheckups || []).map((item) => (
-                    <tr key={item._id} className="hover:bg-zinc-900/50">
+                  {(store.healthCheckups || []).map((item, i) => (
+                    <tr key={item._id || item.id || i} className="hover:bg-zinc-900/50">
                       <td className="py-4 px-5">
-                        <p className="font-bold text-white">{item.name}</p>
+                        <p className="font-bold text-white">{item.contactName || item.name || "Executive Lead"}</p>
                         <p className="text-zinc-500">{item.email}</p>
                       </td>
                       <td className="py-4 px-5">
-                        <p className="text-brand-goldLight font-medium">{item.company}</p>
+                        <p className="text-brand-goldLight font-medium">{item.businessName || item.company}</p>
                         <p className="text-zinc-500">{item.industry}</p>
                       </td>
                       <td className="py-4 px-5">
                         <span className="text-base font-extrabold text-gold-gradient">
-                          {item.overallScore}/100
+                          {item.score || item.overallScore || 78}/100
                         </span>
                       </td>
-                      <td className="py-4 px-5">
-                        <div className="flex flex-wrap gap-1">
-                          {(item.recommendedServices || []).map((s) => (
-                            <span
-                              key={s}
-                              className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-[10px]"
-                            >
-                              {s}
-                            </span>
-                          ))}
-                        </div>
+                      <td className="py-4 px-5 text-zinc-300">
+                        {item.primaryChallenge || item.challenge || "Full-Stack Transformation"}
                       </td>
-                      <td className="py-4 px-5 text-zinc-400">
-                        {new Date(item.createdAt).toLocaleDateString()}
-                      </td>
+                      <td className="py-4 px-5 text-zinc-400">{formatDate(item)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -627,16 +595,16 @@ export default function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-800/70 text-xs text-zinc-300">
-                  {(store.leadMagnets || []).map((item) => (
-                    <tr key={item._id} className="hover:bg-zinc-900/50">
+                  {(store.leadMagnets || []).map((item, i) => (
+                    <tr key={item._id || item.id || i} className="hover:bg-zinc-900/50">
                       <td className="py-4 px-5 font-bold text-white">{item.name}</td>
                       <td className="py-4 px-5">{item.email}</td>
                       <td className="py-4 px-5">{item.phone}</td>
                       <td className="py-4 px-5 text-brand-goldLight">{item.company}</td>
-                      <td className="py-4 px-5">{item.guideTitle}</td>
-                      <td className="py-4 px-5 text-zinc-400">
-                        {new Date(item.createdAt).toLocaleDateString()}
+                      <td className="py-4 px-5">
+                        {item.downloadedGuide || item.guideTitle || "Software Project Planning Guide"}
                       </td>
+                      <td className="py-4 px-5 text-zinc-400">{formatDate(item)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -658,8 +626,8 @@ export default function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-800/70 text-xs text-zinc-300">
-                  {(store.applications || []).map((item) => (
-                    <tr key={item._id} className="hover:bg-zinc-900/50">
+                  {(store.applications || []).map((item, i) => (
+                    <tr key={item._id || item.id || i} className="hover:bg-zinc-900/50">
                       <td className="py-4 px-5 font-bold text-white">{item.name}</td>
                       <td className="py-4 px-5">
                         <p>{item.email}</p>
@@ -689,10 +657,10 @@ export default function AdminDashboard() {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-zinc-800 bg-zinc-950/80 text-[11px] uppercase tracking-wider text-brand-gold">
-                    <th className="py-4 px-5">Industry & Goal</th>
+                    <th className="py-4 px-5">Industry & Prompt</th>
                     <th className="py-4 px-5">AI Recommended Stack</th>
                     <th className="py-4 px-5">Estimated Timeline</th>
-                    <th className="py-4 px-5">Projected Impact</th>
+                    <th className="py-4 px-5">Architecture Summary</th>
                     <th className="py-4 px-5">Generated At</th>
                   </tr>
                 </thead>
@@ -704,11 +672,11 @@ export default function AdminDashboard() {
                       </td>
                     </tr>
                   ) : (
-                    store.aiBlueprints.map((item) => (
-                      <tr key={item._id} className="hover:bg-zinc-900/50">
+                    store.aiBlueprints.map((item, i) => (
+                      <tr key={item._id || i} className="hover:bg-zinc-900/50">
                         <td className="py-4 px-5">
                           <p className="font-bold text-white">{item.industry}</p>
-                          <p className="text-zinc-400 text-[11px]">{item.projectGoal}</p>
+                          <p className="text-zinc-400 text-[11px]">{item.prompt || item.projectGoal}</p>
                         </td>
                         <td className="py-4 px-5">
                           <div className="flex flex-wrap gap-1">
@@ -722,11 +690,13 @@ export default function AdminDashboard() {
                             ))}
                           </div>
                         </td>
-                        <td className="py-4 px-5 font-mono text-brand-gold">{item.estimatedTimeline}</td>
-                        <td className="py-4 px-5 text-emerald-400 font-semibold">{item.estimatedImpact}</td>
-                        <td className="py-4 px-5 text-zinc-400">
-                          {new Date(item.createdAt).toLocaleString()}
+                        <td className="py-4 px-5 font-mono text-brand-gold">
+                          {item.estimatedWeeks || item.estimatedTimeline || "6–10 Weeks"}
                         </td>
+                        <td className="py-4 px-5 text-zinc-300 max-w-xs truncate">
+                          {item.architectureSummary || item.estimatedImpact || "Full-Stack + 3D Ecosystem"}
+                        </td>
+                        <td className="py-4 px-5 text-zinc-400">{formatDate(item)}</td>
                       </tr>
                     ))
                   )}
