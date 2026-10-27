@@ -3,12 +3,6 @@ import { Canvas } from "@react-three/fiber";
 import useDevicePerformance from "../../hooks/useDevicePerformance";
 import { Sparkles } from "lucide-react";
 
-/**
- * Performance-optimized WebGL wrapper (Sections 29 & 30):
- * - Mounts WebGL <Canvas> only when near/in viewport via IntersectionObserver so browsers never hit WebGL context limits
- * - Adjusts DPR for mobile/low-power GPUs
- * - Provides an interactive fallback option on ultra-low-end devices or if WebGL context is lost
- */
 export default function WebGLCanvasWrapper({
   children,
   camera = { position: [0, 0, 6.5], fov: 45 },
@@ -42,7 +36,6 @@ export default function WebGLCanvasWrapper({
 
   return (
     <div ref={containerRef} className={`relative select-none ${className}`}>
-      {/* GPU Performance Mode Toggle for Evaluators & Mobile Users */}
       <div className="absolute top-3 right-3 z-20 flex items-center gap-2">
         <button
           type="button"

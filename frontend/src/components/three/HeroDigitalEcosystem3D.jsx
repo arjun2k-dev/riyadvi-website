@@ -14,9 +14,11 @@ const ECOSYSTEM_NODES = [
   { id: "growth", label: "Digital Growth", metric: "+240% Leads", position: [-0.25, -2.05, 0.45], color: "#FFF3B0" }
 ];
 
-function ParticleWaveMatrix({ isLowPower }) {
+const WAVE_GRID_COUNT = 18;
+
+function ParticleWaveMatrix() {
   const pointsRef = useRef();
-  const gridCount = isLowPower ? 14 : 22;
+  const gridCount = WAVE_GRID_COUNT;
 
   const { positions, initialPositions } = useMemo(() => {
     const total = gridCount * gridCount;
@@ -80,7 +82,7 @@ function ParticleWaveMatrix({ isLowPower }) {
   );
 }
 
-function QuantumEcosystemScene({ isLowPower, activeNode, onSelectNode, viewMode }) {
+function QuantumEcosystemScene({ activeNode, onSelectNode, viewMode }) {
   const groupRef = useRef();
   const coreRef = useRef();
   const innerCoreRef = useRef();
@@ -137,11 +139,9 @@ function QuantumEcosystemScene({ isLowPower, activeNode, onSelectNode, viewMode 
 
       <OrbitControls enableZoom={false} enablePan={false} rotateSpeed={0.5} />
 
-      {!isLowPower && (
-        <Stars radius={38} depth={30} count={700} factor={2.6} saturation={0} fade speed={1.2} />
-      )}
+      <Stars radius={38} depth={30} count={450} factor={2.4} saturation={0} fade speed={1.1} />
       <Sparkles
-        count={isLowPower ? 30 : 80}
+        count={55}
         scale={6.5}
         size={2.4}
         speed={0.45}
@@ -149,7 +149,7 @@ function QuantumEcosystemScene({ isLowPower, activeNode, onSelectNode, viewMode 
       />
 
       {/* Undulating 3D Gold Particle Wave Matrix */}
-      <ParticleWaveMatrix isLowPower={isLowPower} />
+      <ParticleWaveMatrix />
 
       <group ref={groupRef}>
         <Float speed={2.2} rotationIntensity={0.4} floatIntensity={0.55}>
@@ -329,7 +329,7 @@ export default function HeroDigitalEcosystem3D({ className }) {
         />
       </WebGLCanvasWrapper>
 
-      {/* Integrated Bottom 3D Node Telemetry HUD (Zero Z-Index Bleed Over Modals!) */}
+      {/* Integrated Bottom 3D Node Telemetry HUD */}
       <div className="mt-2 pt-3 border-t border-zinc-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-2">
         <div className="flex items-center gap-2.5">
           <span className="px-2.5 py-1 rounded-lg bg-brand-gold/15 border border-brand-gold/40 text-brand-gold font-mono text-xs font-bold">
