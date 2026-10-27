@@ -110,3 +110,28 @@ npm run dev
 
 ## 9. AI Tools Used
 - **Google Gemini**: Used exclusively as the end-to-end AI coding and architecture partner across the entire project—including full-stack React + Express + MongoDB system design, Three.js / React Three Fiber 3D procedural WebGL shaders and particle wave scenes, GSAP + Lenis animation choreography, the on-page AI Solutions Architect engine, and automated deployment configuration.
+
+
+## 10. Deployment Architecture
+
+
+### Backend Deployment (Render)
+- **Platform**: [Render](https://render.com)
+- **Root Directory**: `backend`
+- **Build Command**: `npm install`
+- **Start Command**: `node src/server.js`
+- **Environment Variables**:
+  - `PORT` (e.g., `5000`)
+  - `MONGODB_URI` (MongoDB Atlas connection string)
+  - `NODE_ENV` (`production`)
+- **Live API Endpoint**: `https://riyadvi-backend-api.onrender.com/api`
+
+### Frontend Deployment (Vercel)
+- **Platform**: [Vercel](https://vercel.com)
+- **Root Directory**: `frontend`
+- **Framework Preset**: `Vite`
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+- **Environment Variables**:
+  - `VITE_API_URL` (`https://riyadvi-backend-api.onrender.com/api`)
+- **Live Production URL**: [riyadvi-website-pi.vercel.app](https://riyadvi-website-pi.vercel.app)
