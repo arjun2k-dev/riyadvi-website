@@ -80,8 +80,9 @@ const END_TO_END_JOURNEY = [
 ];
 
 export default function Home({ onOpenConsultation }) {
-  const [activeServiceSlug, setActiveServiceSlug] = useState(SERVICES_DATA[0].slug);
-  const activeService = SERVICES_DATA.find((s) => s.slug === activeServiceSlug) || SERVICES_DATA[0];
+  const { services, portfolio } = useContent();
+  const [activeServiceSlug, setActiveServiceSlug] = useState(() => (services?.[0]?.slug || "web-development"));
+  const activeService = (services && services.find((s) => s.slug === activeServiceSlug)) || services?.[0] || {};
 
   return (
     <div className="space-y-28 md:space-y-36 pb-20">
@@ -218,7 +219,7 @@ export default function Home({ onOpenConsultation }) {
 
         {/* 6 Interactive Service Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {SERVICES_DATA.map((service, idx) => {
+          {(services || []).map((service, idx) => {
             const isSelected = service.slug === activeServiceSlug;
             return (
               <MagneticTiltCard
@@ -415,7 +416,7 @@ export default function Home({ onOpenConsultation }) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {PORTFOLIO_DATA.slice(0, 3).map((project) => (
+          {(portfolio || []).slice(0, 3).map((project) => (
             <MagneticTiltCard key={project.slug} className="p-6 flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between text-xs mb-3">
